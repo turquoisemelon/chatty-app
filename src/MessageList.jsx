@@ -5,9 +5,11 @@ class MessageList extends Component {
   render() {
     return (
       <main className="messages">
-        <Message/>
+        {
+          this.props.messages.map((chatObj, index) => <Message index= {index} chattyUsername= {chatObj.username} chattyMessage={chatObj.content} />)
+        }
         <div className="message system">
-          Anonymous1 changed their name to nomnom.
+
         </div>
       </main>
     );
