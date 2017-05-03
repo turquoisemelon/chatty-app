@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
+
 const chattyData = {
   currentUser: {username: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
   messages: [
@@ -21,19 +22,27 @@ class App extends Component {
     super(props);
     this.handleInsertMessage = this.handleInsertMessage.bind(this);
     this.state = chattyData;
+
+    this.socket = new WebSocket("ws://localhost:3001");
   }
 
   handleInsertMessage = (message) => {
     const newMessage = {id:3, username: message.username, content: message.content};
-    const messages = this.state.messages.concat([newMessage]);
+    const messages = this.state.messages.concat(newMessage);
     this.setState({messages});
+    console.log(messages);
+
+
+    this.socket.send(newMessage);
+
 
     // send message to server
-
   }
 
   componentDidMount() {
     // Add a new message to the list of messages in the data store
+
+
 
     // fetch all messages from server
   }
