@@ -21,28 +21,27 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleInsertMessage = this.handleInsertMessage.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
     this.state = chattyData;
 
-    this.socket = new WebSocket("ws://localhost:3001");
+    this.connection = new WebSocket("ws://localhost:3001");
+  }
+
+  sendMessage(message) {
+    this.connection.send(JSON.stringify(message));
+    console.log('message sent to the server from client');
   }
 
   handleInsertMessage = (message) => {
     const newMessage = {id:3, username: message.username, content: message.content};
     const messages = this.state.messages.concat(newMessage);
     this.setState({messages});
-    console.log(messages);
-
-
-    this.socket.send(newMessage);
-
-
     // send message to server
+    this.sendMessage({message: message})
   }
 
   componentDidMount() {
     // Add a new message to the list of messages in the data store
-
-
 
     // fetch all messages from server
   }
