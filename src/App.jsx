@@ -27,17 +27,19 @@ class App extends Component {
   handleInsertMessage = (message) => {
     const newMessage = {username: message.username, content: message.content};
     console.log('newMessage: ', newMessage);
-    // var msgs = this.state.messages;
-    // msgs.push(newMessage);
-    // this.setState({messages: msgs});
     // send message to server
     this.sendMessage({message: newMessage})
   }
 
   componentDidMount() {
+    this.connection.onopen = (event) => {
+      console.log('Connected to server');
+    }
     this.connection.onmessage = (event) => {
+      // The socket event data is encoded as a JSON string.
+      // This line turns it into an object
       const serverData = JSON.parse(event.data);
-      console.log('data coming back from server: ', serverData);
+      // console.log('data coming back from server: ', serverData);
       const serverDataArray =[];
       serverDataArray.push(serverData.message);
       // Add a new message to the list of messages in the data store
@@ -50,7 +52,9 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
+          <a href="/" className="navbar-brand">
+            Chatty
+          </a>
         </nav>
         <MessageList messages={this.state.messages}/>
         <ChatBar handleInsertMessage={this.handleInsertMessage} currentUser={this.state.currentUser}/>
