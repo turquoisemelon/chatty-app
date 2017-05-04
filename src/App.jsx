@@ -25,10 +25,24 @@ class App extends Component {
   }
 
   handleInsertMessage = (message) => {
-    const newMessage = {username: message.username, content: message.content};
+    console.log(message);
+    const newMessage = {type: "postMessage", username: message.username, content: message.content};
+    const newNotification = {type: "postNotification", content: `UserA has changed their name to ${message.username}`}
     console.log('newMessage: ', newMessage);
+    console.log('newNotification: ', newNotification);
     // send message to server
-    this.sendMessage({message: newMessage})
+    // newMessage.type = "postMessage";
+    // newNotification.type = "postNotification";
+    if(newNotification.type === "postNotification") {
+      this.sendMessage({message: newNotification})
+    } else {
+      throw new Error("Unknown event type" + newMessage.type)
+    }
+    if(newMessage.type === "postMessage") {
+      this.sendMessage({message: newMessage})
+    } else {
+      throw new Error("Unknown event type" + newMessage.type)
+    }
   }
 
   componentDidMount() {
@@ -39,7 +53,15 @@ class App extends Component {
       // The socket event data is encoded as a JSON string.
       // This line turns it into an object
       const serverData = JSON.parse(event.data);
-      // console.log('data coming back from server: ', serverData);
+      console.log('data coming back from server: ', serverData);
+      switch(serverData.message.type) {
+        case "incomingMessage":
+        break;
+        case "incomingNotification":
+        break;
+        default:
+        throw new Error("Unknown event type: " + serverData.message.type)
+      }
       const serverDataArray =[];
       serverDataArray.push(serverData.message);
       // Add a new message to the list of messages in the data store
