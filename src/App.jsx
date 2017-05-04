@@ -4,17 +4,8 @@ import ChatBar from './ChatBar.jsx';
 
 
 const chattyData = {
-  currentUser: {username: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-  messages: [
-    { id: 1,
-      username: "Bob",
-      content: "Has anyone seen my marbles?"
-    },
-    { id: 2,
-      username: "Anonymous",
-      content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-    }
-  ]
+  currentUser: {name: "Bob"},
+  messages: [] // messages coming from the server will be stored here as they arrive
 }
 
 class App extends Component {
@@ -23,6 +14,7 @@ class App extends Component {
     this.handleInsertMessage = this.handleInsertMessage.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.state = chattyData;
+    this.componentDidMount = this.componentDidMount.bind(this);
 
     this.connection = new WebSocket("ws://localhost:3001");
   }
@@ -33,17 +25,25 @@ class App extends Component {
   }
 
   handleInsertMessage = (message) => {
-    const newMessage = {id:3, username: message.username, content: message.content};
-    const messages = this.state.messages.concat(newMessage);
-    this.setState({messages});
+    const newMessage = {username: message.username, content: message.content};
+    console.log('newMessage: ', newMessage);
+    // var msgs = this.state.messages;
+    // msgs.push(newMessage);
+    // this.setState({messages: msgs});
     // send message to server
-    this.sendMessage({message: message})
+    this.sendMessage({message: newMessage})
   }
 
   componentDidMount() {
-    // Add a new message to the list of messages in the data store
-
-    // fetch all messages from server
+    this.connection.onmessage = (event) => {
+      const serverData = JSON.parse(event.data);
+      console.log('data coming back from server: ', serverData);
+      const serverDataArray =[];
+      serverDataArray.push(serverData.message);
+      // Add a new message to the list of messages in the data store
+      // fetch all messages from server
+      this.setState({messages: this.state.messages.concat(serverDataArray)});
+    }
   }
 
   render() {
