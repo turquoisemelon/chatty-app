@@ -26,23 +26,16 @@ class App extends Component {
 
   handleInsertMessage = (message) => {
     console.log(message);
-    const newMessage = {type: "postMessage", username: message.username, content: message.content};
-    const newNotification = {type: "postNotification", content: `UserA has changed their name to ${message.username}`}
-    console.log('newMessage: ', newMessage);
-    console.log('newNotification: ', newNotification);
-    // send message to server
-    // newMessage.type = "postMessage";
-    // newNotification.type = "postNotification";
-    if(newNotification.type === "postNotification") {
+    if(this.state.currentUser.name !== message.username) {
+      this.state.currentUser.name = message.username;
+      const newNotification = {type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${message.username}`}
+      console.log('newNotification: ', newNotification);
       this.sendMessage({message: newNotification})
-    } else {
-      throw new Error("Unknown event type" + newMessage.type)
     }
-    if(newMessage.type === "postMessage") {
+    // send message to server
+      const newMessage = {type: "postMessage", username: message.username, content: message.content};
+      console.log('newMessage: ', newMessage);
       this.sendMessage({message: newMessage})
-    } else {
-      throw new Error("Unknown event type" + newMessage.type)
-    }
   }
 
   componentDidMount() {

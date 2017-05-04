@@ -8,7 +8,7 @@ class MessageList extends Component {
       <main className="messages">
         {
           this.props.messages.map( message => {
-            if (message.type === 'incomingNotificationotification') {
+            if (message.type === 'incomingNotification') {
               return <Notification key={message.id}
                                    content={message.content}/>
             } else {

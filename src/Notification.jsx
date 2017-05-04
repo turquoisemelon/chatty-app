@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Notification extends Component {
   render() {
     return (
-      <div class="message system">
+      <div className="message system">
         {this.props.content}
       </div>
     );
