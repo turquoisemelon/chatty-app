@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class ChatBar extends Component {
   constructor(props) {
     super()
-    this.state = {username: props.currentUser.username, content: ''}
+    this.state = {username: props.currentUser.name, content: ''}
 
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
