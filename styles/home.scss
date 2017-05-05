@@ -66,6 +66,8 @@ body {
 }
 
 .navbar {
+  display: flex;
+  justify-content: space-between;
   background: tomato;
   border-bottom: 1px solid black;
   height: 60px;

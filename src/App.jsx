@@ -26,8 +26,8 @@ class App extends Component {
   handleInsertMessage = (message) => {
     console.log(message);
     if(this.state.currentUser.name !== message.username) {
-      this.state.currentUser.name = message.username;
       const newNotification = {type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${message.username}`}
+      this.state.currentUser.name = message.username;
       console.log('newNotification: ', newNotification);
       this.sendMessage({message: newNotification});
     }
@@ -44,21 +44,27 @@ class App extends Component {
     this.connection.onmessage = (event) => {
       // The socket event data is encoded as a JSON string.
       // This line turns it into an object
-      const serverData = JSON.parse(event.data);
+      let serverData = JSON.parse(event.data);
       console.log('data coming back from server: ', serverData);
-      switch(serverData.message.type) {
-        case "incomingMessage":
-        break;
-        case "incomingNotification":
-        break;
-        default:
-        throw new Error("Unknown event type: " + serverData.message.type)
-      }
+      console.log('serverdata.message', serverData.message);
       const serverDataArray =[];
-      serverDataArray.push(serverData.message);
+      if(Number.isInteger(serverData.counter)) {
+        this.state.onlineUsers = serverData.counter;
+      } else {
+        switch(serverData.message.type) {
+          case "incomingMessage":
+          serverDataArray.push(serverData.message);
+          break;
+          case "incomingNotification":
+          serverDataArray.push(serverData.message);
+          break;
+          default:
+          throw new Error("Unknown event type: " + serverData.message.type)
+        }
+      }
+      this.setState({messages: this.state.messages.concat(serverDataArray)});
       // Add a new message to the list of messages in the data store
       // fetch all messages from server
-      this.setState({messages: this.state.messages.concat(serverDataArray)});
     }
   }
 
@@ -69,6 +75,9 @@ class App extends Component {
           <a href="/" className="navbar-brand">
             Chatty
           </a>
+          {
+          this.state.onlineUsers ? <a className="navbar-brand"> {this.state.onlineUsers} users online</a> : <a className="navbar-brand"> 0 users online</a>
+          }
         </nav>
         <MessageList messages={this.state.messages}/>
         <ChatBar handleInsertMessage={this.handleInsertMessage} currentUser={this.state.currentUser}/>
