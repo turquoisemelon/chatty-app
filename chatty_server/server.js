@@ -13,19 +13,19 @@ const wss = new SocketServer({ port: PORT });
 // the ws parameter in the callback.
 wss.on('connection', (client) => {
   console.log('Client connected');
+  // console.log('wss.clients object: ', wss.clients)
 
   wss.broadcast = function broadcast(data) {
     wss.clients.forEach(function each(client) {
       // if (client.readyState === SocketServer.OPEN) {
-        client.send(JSON.stringify(data));
-        console.log('data sent to client from servers');
+      client.send(JSON.stringify(data));
+      console.log('data sent to client from servers');
       // }
     });
   };
 
   client.on('message', (rawMessage) => {
     const receivedMessage = JSON.parse(rawMessage);
-    console.log('received message:', receivedMessage);
     switch(receivedMessage.message.type) {
       case "postNotification":
         receivedMessage.message.type = "incomingNotification"

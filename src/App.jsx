@@ -15,7 +15,6 @@ class App extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.state = chattyData;
     this.componentDidMount = this.componentDidMount.bind(this);
-
     this.connection = new WebSocket("ws://localhost:3001");
   }
 
@@ -30,12 +29,12 @@ class App extends Component {
       this.state.currentUser.name = message.username;
       const newNotification = {type: "postNotification", content: `${this.state.currentUser.name} has changed their name to ${message.username}`}
       console.log('newNotification: ', newNotification);
-      this.sendMessage({message: newNotification})
+      this.sendMessage({message: newNotification});
     }
     // send message to server
       const newMessage = {type: "postMessage", username: message.username, content: message.content};
       console.log('newMessage: ', newMessage);
-      this.sendMessage({message: newMessage})
+      this.sendMessage({message: newMessage});
   }
 
   componentDidMount() {
