@@ -9,6 +9,15 @@ const PORT = 3001;
 const wss = new SocketServer({ port: PORT });
 const onlineUsers= {counter: 0};
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
@@ -30,6 +39,10 @@ wss.on('connection', (client) => {
     });
   };
   wss.broadcast(onlineUsers);
+
+  function assignColor(message) {
+    const colorArray = ['#0000FF', '#7FFF00', '#00FFFF', '#8B008B', '#FFD700', '#CD5C5C'];
+  }
 
   client.on('message', (rawMessage) => {
     const receivedMessage = JSON.parse(rawMessage);
