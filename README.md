@@ -6,18 +6,18 @@ A client-side SPA (single-page app) built with ReactJS, Webpack, Babel, Node.js 
 ### Usage
 
 Clone the repo to your local machine.
-
-```
-
 Install the dependencies and start the server.
 
 1st server
+
 ```
 npm install
 npm start
 open http://localhost:3000
+
 ```
 2nd server
+
 ```
 cd to `chatty_server`
 npm install
