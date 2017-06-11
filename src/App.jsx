@@ -4,7 +4,7 @@ import ChatBar from './ChatBar.jsx';
 
 
 const chattyData = {
-  currentUser: {name: "Bob"},
+  currentUser: {name: "Anonymous"},
   messages: [] // messages coming from the server will be stored here as they arrive
 }
 
